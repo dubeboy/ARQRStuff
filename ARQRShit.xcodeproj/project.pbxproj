@@ -12,6 +12,9 @@
 		178D795A22A672DF00AC481C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 178D795822A672DF00AC481C /* Main.storyboard */; };
 		178D795C22A672E100AC481C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 178D795B22A672E100AC481C /* Assets.xcassets */; };
 		178D795F22A672E100AC481C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 178D795D22A672E100AC481C /* LaunchScreen.storyboard */; };
+		F302871622AFB95D00AF081F /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F302871522AFB95D00AF081F /* Extensions.swift */; };
+		F302871A22AFD64D00AF081F /* DVTGrad.swift in Sources */ = {isa = PBXBuildFile; fileRef = F302871922AFD64D00AF081F /* DVTGrad.swift */; };
+		F302871C22AFD91900AF081F /* DVTGradsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F302871B22AFD91900AF081F /* DVTGradsManager.swift */; };
 		F3718DA422AA53970007D93D /* SecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3718DA322AA53960007D93D /* SecondViewController.swift */; };
 		F3718DA622AA56950007D93D /* UxGrads.sks in Resources */ = {isa = PBXBuildFile; fileRef = F3718DA522AA56950007D93D /* UxGrads.sks */; };
 /* End PBXBuildFile section */
@@ -24,6 +27,9 @@
 		178D795B22A672E100AC481C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		178D795E22A672E100AC481C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		178D796022A672E100AC481C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F302871522AFB95D00AF081F /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		F302871922AFD64D00AF081F /* DVTGrad.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DVTGrad.swift; sourceTree = "<group>"; };
+		F302871B22AFD91900AF081F /* DVTGradsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DVTGradsManager.swift; sourceTree = "<group>"; };
 		F3718DA322AA53960007D93D /* SecondViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondViewController.swift; sourceTree = "<group>"; };
 		F3718DA522AA56950007D93D /* UxGrads.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = UxGrads.sks; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -58,16 +64,43 @@
 		178D795322A672DF00AC481C /* ARQRShit */ = {
 			isa = PBXGroup;
 			children = (
-				F3718DA522AA56950007D93D /* UxGrads.sks */,
+				F302871822AFD63A00AF081F /* Model */,
+				F302871722AFB9D100AF081F /* View */,
+				F302871422AFB94B00AF081F /* Common */,
 				178D795422A672DF00AC481C /* AppDelegate.swift */,
-				178D795622A672DF00AC481C /* ViewController.swift */,
 				178D795822A672DF00AC481C /* Main.storyboard */,
 				178D795B22A672E100AC481C /* Assets.xcassets */,
 				178D795D22A672E100AC481C /* LaunchScreen.storyboard */,
 				178D796022A672E100AC481C /* Info.plist */,
-				F3718DA322AA53960007D93D /* SecondViewController.swift */,
 			);
 			path = ARQRShit;
+			sourceTree = "<group>";
+		};
+		F302871422AFB94B00AF081F /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				F302871522AFB95D00AF081F /* Extensions.swift */,
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
+		F302871722AFB9D100AF081F /* View */ = {
+			isa = PBXGroup;
+			children = (
+				F3718DA522AA56950007D93D /* UxGrads.sks */,
+				178D795622A672DF00AC481C /* ViewController.swift */,
+				F3718DA322AA53960007D93D /* SecondViewController.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		F302871822AFD63A00AF081F /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				F302871922AFD64D00AF081F /* DVTGrad.swift */,
+				F302871B22AFD91900AF081F /* DVTGradsManager.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -144,7 +177,10 @@
 			files = (
 				F3718DA422AA53970007D93D /* SecondViewController.swift in Sources */,
 				178D795722A672DF00AC481C /* ViewController.swift in Sources */,
+				F302871C22AFD91900AF081F /* DVTGradsManager.swift in Sources */,
 				178D795522A672DF00AC481C /* AppDelegate.swift in Sources */,
+				F302871622AFB95D00AF081F /* Extensions.swift in Sources */,
+				F302871A22AFD64D00AF081F /* DVTGrad.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

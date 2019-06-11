@@ -31,28 +31,10 @@ class SecondViewController: UIViewController {
 		super.viewWillAppear(animated)
 		let config = ARWorldTrackingConfiguration()
 		 config.planeDetection = [.vertical]
-		sceneView.session.run(config)
+		sceneView.session.run(config, options: [ .resetTracking, .removeExistingAnchors ])
 	}
 	
-	private func addMoreUserInfoNode() {
-		let detailPlane = SCNPlane(width: 0.3, height: 0.3)
-	//	detailPlane.cornerRadius = 0.25
-		
-		let detailNode = SCNNode(geometry: detailPlane)
-		detailNode.geometry?.firstMaterial?.diffuse.contents = SKScene(fileNamed: "UxGrads")
-		
-		detailNode.geometry?.firstMaterial?.diffuse.contentsTransform = SCNMatrix4Translate(SCNMatrix4MakeScale(1, -1, 1), 0, 1, 0)
-	//	detailNode.position.z -= 0.5
-		detailNode.opacity = 0
-		sceneView.scene.rootNode.addChildNode(detailNode)
-		let seq: [SCNAction] = [
-			.wait(duration: 1.0),
-			.fadeOpacity(to: 1.0, duration: 1.5),
-			.moveBy(x: 0.3 * -1.1, y: 0, z: -0.05, duration: 1.5),
-			.moveBy(x: 0, y: 0, z: -0.05, duration: 0.2)
-		]
-		detailNode.runAction(.sequence(seq))
-	}
+	
 	
 	private func setupQRCodeDetection() {
 		// Create a Barcode Detection Request
@@ -85,7 +67,9 @@ class SecondViewController: UIViewController {
 			
 			do {
 				let jsonRespose = try? JSONSerialization.jsonObject(with: Data(payload.utf8), options: []) as? [String: Any]
-				let id = jsonRespose?["id"] as? Int ?? -1
+				DVTGradsManager.shared.grads = DVTGrad(data: jsonRespose)
+				guard let dvtGradModel = DVTGradsManager.shared.grads else { return }
+				let id = dvtGradModel.id
 				if id != -1 && scannedQRCodes[id] == nil {
 					scannedQRCodes[id] = jsonRespose?.description
 					hitTestQrCode(center: center)
@@ -120,27 +104,43 @@ extension SecondViewController: ARSessionDelegate {
 }
 
 extension SecondViewController: ARSCNViewDelegate {
+	private func addMoreUserInfoNode(anchor: ARAnchor, dvtGrad: DVTGrad) -> SCNNode? {
+		let detailPlane = SCNPlane(width: 0.3, height: 0.3)
+		//	detailPlane.cornerRadius = 0.25
+		let detailNode = SCNNode(geometry: detailPlane)
+		
+		guard let scene = SKScene(fileNamed: "UxGrads")  else {return nil}
+		print(scene.children)
+		
+		let gradProgrameName = scene.childNode(withName: "gradsTeam")
+		let commaSeparatedGradsNames = scene.childNode(withName: "CSVGradsNames")
+		let mascotNames = scene.childNode(withName: "mascotNames")
+		let gradsImage = scene.childNode(withName: "image")
+		
+		(gradProgrameName as? SKLabelNode)?.text = dvtGrad.gradPrograme
+		(commaSeparatedGradsNames as? SKLabelNode)?.text = dvtGrad.gradsInProgram
+		(mascotNames as? SKLabelNode)?.text = dvtGrad.mascotName
+
+		detailNode.geometry?.firstMaterial?.diffuse.contents = scene
+		detailNode.geometry?.firstMaterial?.diffuse.contentsTransform
+			= SCNMatrix4Translate(SCNMatrix4MakeScale(1, -1, 1), 0, 1, 0)
+		detailNode.opacity = 0
+		sceneView.scene.rootNode.addChildNode(detailNode)
+		let seq: [SCNAction] = [
+			.wait(duration: 1.0),
+			.fadeOpacity(to: 1.0, duration: 1.5),
+			.moveBy(x: 0, y: 0, z: -0.05, duration: 0.2)
+		]
+		detailNode.runAction(.sequence(seq))
+		return detailNode
+	}
+	
 	func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
-		
-			print(anchor as? ARPlaneAnchor)
-		    print(anchor as? ARObjectAnchor)
-		
-			let detailPlane = SCNPlane(width: 0.3, height: 0.3)
-			//	detailPlane.cornerRadius = 0.25
-			let detailNode = SCNNode(geometry: detailPlane)
-			detailNode.geometry?.firstMaterial?.diffuse.contents = SKScene(fileNamed: "UxGrads")
-			
-			detailNode.geometry?.firstMaterial?.diffuse.contentsTransform = SCNMatrix4Translate(SCNMatrix4MakeScale(1, -1, 1), 0, 1, 0)
-//			detailNode.position = SCNVector3(planeAnchor.center.x, planeAnchor.center.y, planeAnchor.center.z)
-			detailNode.opacity = 0
-			sceneView.scene.rootNode.addChildNode(detailNode)
-			let seq: [SCNAction] = [
-				.wait(duration: 1.0),
-				.fadeOpacity(to: 1.0, duration: 1.5),
-				.moveBy(x: 0, y: 0, z: -0.05, duration: 0.2)
-			]
-			detailNode.runAction(.sequence(seq))
-		
-			return detailNode
+		// ARPlaneAnchor
+		if !(anchor is ARPlaneAnchor) {
+			print("grads before render \(DVTGradsManager.shared.grads)")
+			return addMoreUserInfoNode(anchor: anchor, dvtGrad: DVTGradsManager.shared.grads)
+		}
+		return nil
 	}
 }
