@@ -80,13 +80,10 @@ class SecondViewController: UIViewController {
 			} catch {
 				print("sorry could not deserialise this")
 			}
-			
 		} else {
 			
 		}
 	}
-	
-
 }
 
 extension SecondViewController: ARSessionDelegate {
@@ -120,7 +117,9 @@ extension SecondViewController: ARSCNViewDelegate {
 		(gradProgrameName as? SKLabelNode)?.text = dvtGrad.gradPrograme
 		(commaSeparatedGradsNames as? SKLabelNode)?.text = dvtGrad.gradsInProgram
 		(mascotNames as? SKLabelNode)?.text = dvtGrad.mascotName
-
+		DVTGradsManager.shared.downloadImage {
+			(gradsImage as? SKSpriteNode)?.texture = SKTexture(image: $0)
+		}
 		detailNode.geometry?.firstMaterial?.diffuse.contents = scene
 		detailNode.geometry?.firstMaterial?.diffuse.contentsTransform
 			= SCNMatrix4Translate(SCNMatrix4MakeScale(1, -1, 1), 0, 1, 0)

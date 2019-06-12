@@ -6,10 +6,33 @@
 //  Copyright © 2019 DVT. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 class DVTGradsManager {
 	static let shared = DVTGradsManager()
     var grads: DVTGrad!
 	private init() {}
+	
+	func downloadImage(complete: @escaping (_ image: UIImage) -> Void) {
+		
+		guard let url = URL(string: grads.imageURL) else {
+			return
+		}
+		
+		URLSession.shared.dataTask(with: url) { data, response, error in
+			guard
+				let httpURLResponse = response as? HTTPURLResponse, httpURLResponse.statusCode == 200,
+				let mimeType = response?.mimeType, mimeType.hasPrefix("image"),
+				let data = data, error == nil,
+				let image = UIImage(data: data)
+				else {
+					return
+			}
+			DispatchQueue.main.async() {
+				complete(image)
+			}
+			}.resume()
+	}
 }
+
+
