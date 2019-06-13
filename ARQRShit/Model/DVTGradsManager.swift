@@ -10,12 +10,12 @@ import UIKit
 
 class DVTGradsManager {
 	static let shared = DVTGradsManager()
-    var grads: DVTGrad!
+    var grads: DVTGrad?
 	private init() {}
 	
 	func downloadImage(complete: @escaping (_ image: UIImage) -> Void) {
 		
-		guard let url = URL(string: grads.imageURL) else {
+		guard let imageUrl = grads?.imageURL, let url = URL(string: imageUrl) else {
 			return
 		}
 		
@@ -31,7 +31,7 @@ class DVTGradsManager {
 			DispatchQueue.main.async() {
 				complete(image)
 			}
-			}.resume()
+		}.resume()
 	}
 }
 

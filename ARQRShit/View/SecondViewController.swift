@@ -56,7 +56,7 @@ class SecondViewController: UIViewController {
 	func requestHandler(request: VNRequest, error: Error?) {
 		// Get the first result out of the results, if there are any
 		if let results = request.results, let result = results.first as? VNBarcodeObservation {
-			guard let payload = result.payloadStringValue else {return}
+			guard let payload = result.payloadStringValue else { return }
 			// Get the bounding box for the bar code and find the center
 			var rect = result.boundingBox
 			// Flip coordinates
@@ -68,12 +68,15 @@ class SecondViewController: UIViewController {
 			do {
 				let jsonRespose = try? JSONSerialization.jsonObject(with: Data(payload.utf8), options: []) as? [String: Any]
 				DVTGradsManager.shared.grads = DVTGrad(data: jsonRespose)
-				guard let dvtGradModel = DVTGradsManager.shared.grads else { return }
+				guard let dvtGradModel = DVTGradsManager.shared.grads else {
+					print("Your JSON is malformed")
+					return
+				}
 				let id = dvtGradModel.id
 				if id != -1 && scannedQRCodes[id] == nil {
 					scannedQRCodes[id] = jsonRespose?.description
 					hitTestQrCode(center: center)
-					print("Got one")
+					print("Scanned")
 				} else {
 					return
 				}
@@ -136,9 +139,9 @@ extension SecondViewController: ARSCNViewDelegate {
 	
 	func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
 		// ARPlaneAnchor
-		if !(anchor is ARPlaneAnchor) {
+		if let grads = DVTGradsManager.shared.grads {
 			print("grads before render \(DVTGradsManager.shared.grads)")
-			return addMoreUserInfoNode(anchor: anchor, dvtGrad: DVTGradsManager.shared.grads)
+			return addMoreUserInfoNode(anchor: anchor, dvtGrad: grads )
 		}
 		return nil
 	}
